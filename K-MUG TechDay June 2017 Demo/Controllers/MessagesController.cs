@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -18,7 +19,21 @@ namespace K_MUG_TechDay_June_2017_Demo
         {
             if (activity.Type == ActivityTypes.Message)
             {
-                await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
+                ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
+                if ((activity.Text ?? string.Empty) == "//restart" || (activity.Text ?? string.Empty) == "debug")
+                {
+                    activity.GetStateClient().BotState.DeleteStateForUser(activity.ChannelId, activity.From.Id);
+                    await activity.GetStateClient()
+                        .BotState.DeleteStateForUserAsync(activity.ChannelId, activity.From.Id);
+                }
+                try
+                {
+                    await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
+                }
+                catch (Exception ex)
+                {
+                    await connector.Conversations.ReplyToActivityAsync(activity.CreateReply(ex.ToString()));
+                }
             }
             else
             {

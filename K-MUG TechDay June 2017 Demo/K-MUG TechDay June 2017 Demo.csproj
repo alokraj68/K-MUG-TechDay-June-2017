@@ -113,11 +113,15 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\Global.cs" />
+    <Compile Include="Dialogs\LuisQuestion.cs" />
+    <Compile Include="Dialogs\Question.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\LuisCommunicator.cs" />
+    <Compile Include="Utilities\LuisJson.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

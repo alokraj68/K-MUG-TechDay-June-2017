@@ -21,7 +21,7 @@ namespace K_MUG_TechDay_June_2017_Demo.Dialogs
         {
             var activity = await result as Activity;
 
-            // calculate something for us to return
+
             if (activity != null)
             {
                 string Name = string.Empty;
@@ -38,42 +38,64 @@ namespace K_MUG_TechDay_June_2017_Demo.Dialogs
                 await context.PostAsync("Hi, " + Name);
                 await context.PostAsync(typingpush);
                 await Global.TypingDelay(3500);
-                await context.PostAsync("Welcome to sales bot from KMUG!");
+                await context.PostAsync("Thank you for your interest in our product.");
 
 
                 await context.PostAsync(typingpush);
                 await Global.TypingDelay(3500);
 
-                await context.PostAsync("You seemed to be intersted in our product, chair");
+                reply.Attachments.Add(new Attachment()
+                {
+                    ContentUrl = "http://images.pier1.com/dis/dw/image/v2/AAID_PRD/on/demandware.static/-/Sites-pier1_master/default/dwcd617f89/images/2500470/2500470_1.jpg?sw=1600&sh=1600",
+                    ContentType = "image/jpg",
+                    Name = "Chair.png"
+                });
+
+                await context.PostAsync(reply);
+                await context.PostAsync("The selected product costs around $2,250");
                 await context.PostAsync(typingpush);
-                await Global.TypingDelay(2500);
-
-                List<CardImage> cardImages = new List<CardImage>();
-                cardImages.Add(new CardImage(url: "http://images.pier1.com/dis/dw/image/v2/AAID_PRD/on/demandware.static/-/Sites-pier1_master/default/dwcd617f89/images/2500470/2500470_1.jpg?sw=1600&sh=1600"));
-                List<CardAction> cardButtons = new List<CardAction>();
-                CardAction plButton = new CardAction()
+                await Global.TypingDelay(3500);
+                try
                 {
-                    Value = "https://en.wikipedia.org/wiki/Pig_Latin",
-                    Type = "openUrl",
-                    Title = "Buy Me!"
-                };
-                cardButtons.Add(plButton);
-                HeroCard plCard = new HeroCard()
+                    await context.PostAsync(typingpush);
+                    await Global.TypingDelay(3500);
+                    LuisQuestion lq = new LuisQuestion();
+                    await lq.StartAsync(context);
+                }
+                catch (Exception ex)
                 {
-                    Title = "The best Chair",
-                    Subtitle = "1200₹",
-                    Images = cardImages,
-                    Buttons = cardButtons
-                };
+                    await context.PostAsync(ex.ToString());
+                }
+                //await context.PostAsync("You seemed to be intersted in our product, chair");
+                //await context.PostAsync(typingpush);
+                //await Global.TypingDelay(2500);
 
-                var message = context.MakeMessage();
-                message.Attachments = new[] { plCard.ToAttachment() };
+                //List<CardImage> cardImages = new List<CardImage>();
+                //cardImages.Add(new CardImage(url: "http://images.pier1.com/dis/dw/image/v2/AAID_PRD/on/demandware.static/-/Sites-pier1_master/default/dwcd617f89/images/2500470/2500470_1.jpg?sw=1600&sh=1600"));
+                //List<CardAction> cardButtons = new List<CardAction>();
+                //CardAction plButton = new CardAction()
+                //{
+                //    Value = "https://en.wikipedia.org/wiki/Pig_Latin",
+                //    Type = "openUrl",
+                //    Title = "Buy Me!"
+                //};
+                //cardButtons.Add(plButton);
+                //HeroCard plCard = new HeroCard()
+                //{
+                //    Title = "The best Chair",
+                //    Subtitle = "1200₹",
+                //    Images = cardImages,
+                //    Buttons = cardButtons
+                //};
 
-                await context.PostAsync(message);
+                //var message = context.MakeMessage();
+                //message.Attachments = new[] { plCard.ToAttachment() };
+
+                //await context.PostAsync(message);
 
             }
 
-            context.Wait(MessageReceivedAsync);
+            // context.Wait(MessageReceivedAsync);
         }
     }
 }
