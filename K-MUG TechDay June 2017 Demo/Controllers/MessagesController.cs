@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -48,7 +49,24 @@ namespace K_MUG_TechDay_June_2017_Demo
 
         private async Task<Activity> HandleSystemMessage(Activity message)
         {
+            bool msgSent = false;
+            StateClient stateClient = null;
+            BotData userData = null;
             ConnectorClient connector = new ConnectorClient(new Uri(message.ServiceUrl));
+            try
+            {
+                stateClient = message.GetStateClient();
+
+                userData = await stateClient.BotState.GetUserDataAsync(message.ChannelId, message.From.Id);
+                if (userData.GetProperty<bool>("SentGreeting"))
+                {
+                    msgSent = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                await connector.Conversations.ReplyToActivityAsync(message.CreateReply(ex.ToString()));
+            }
             if (message.Type == ActivityTypes.DeleteUserData)
             {
                 // Implement user deletion here
@@ -56,7 +74,28 @@ namespace K_MUG_TechDay_June_2017_Demo
             }
             else if (message.Type == ActivityTypes.ConversationUpdate)
             {
-                await connector.Conversations.ReplyToActivityAsync(message.CreateReply("Hey..."));
+                //await connector.Conversations.ReplyToActivityAsync(
+                //                message.CreateReply(
+                //                    "member added is : " + message.MembersAdded+", msg sent:"+msgSent));
+                if (message.MembersAdded != null && message.MembersAdded.Any())
+                {
+                    foreach (ChannelAccount newMember in message.MembersAdded)
+                    {
+                        if (newMember.Id == message.Recipient.Id)
+                        {
+                            if (msgSent) continue;
+                            await connector.Conversations.ReplyToActivityAsync(message.CreateReply("Hey..."));
+                            msgSent = true;
+                        }
+                        //else
+                        //{
+                        //    if (msgSent) continue;
+                        //    await connector.Conversations.ReplyToActivityAsync(message.CreateReply("Hey..."));
+                        //    msgSent = true;
+                        //}
+                    }
+                }
+
                 // Handle conversation state changes, like members being added and removed
                 // Use Activity.MembersAdded and Activity.MembersRemoved and Activity.Action for info
                 // Not available in all channels
