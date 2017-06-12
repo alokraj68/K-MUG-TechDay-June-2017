@@ -33,9 +33,9 @@ namespace K_MUG_TechDay_June_2017_Demo.Dialogs
 
                 var typingpush = context.MakeMessage();
                 typingpush.Type = ActivityTypes.Typing;
-                await context.PostAsync(typingpush);
-                await Global.TypingDelay(3500);
-                await context.PostAsync("Hi, " + Name);
+                //await context.PostAsync(typingpush);
+                //await Global.TypingDelay(3500);
+                //await context.PostAsync("Hi, " + Name);
                 await context.PostAsync(typingpush);
                 await Global.TypingDelay(3500);
                 await context.PostAsync("Thank you for your interest in our product.");

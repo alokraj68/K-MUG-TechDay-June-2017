@@ -40,14 +40,15 @@ namespace K_MUG_TechDay_June_2017_Demo
             }
             else
             {
-                HandleSystemMessage(activity);
+                await HandleSystemMessage(activity);
             }
             var response = Request.CreateResponse(HttpStatusCode.OK);
             return response;
         }
 
-        private Activity HandleSystemMessage(Activity message)
+        private async Task<Activity> HandleSystemMessage(Activity message)
         {
+            ConnectorClient connector = new ConnectorClient(new Uri(message.ServiceUrl));
             if (message.Type == ActivityTypes.DeleteUserData)
             {
                 // Implement user deletion here
@@ -55,7 +56,7 @@ namespace K_MUG_TechDay_June_2017_Demo
             }
             else if (message.Type == ActivityTypes.ConversationUpdate)
             {
-
+                await connector.Conversations.ReplyToActivityAsync(message.CreateReply("Hey..."));
                 // Handle conversation state changes, like members being added and removed
                 // Use Activity.MembersAdded and Activity.MembersRemoved and Activity.Action for info
                 // Not available in all channels

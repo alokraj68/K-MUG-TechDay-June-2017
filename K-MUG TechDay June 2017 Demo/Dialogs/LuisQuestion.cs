@@ -181,8 +181,6 @@ namespace K_MUG_TechDay_June_2017_Demo.Dialogs
             heroCard.Recipient = context.Activity.From;
             heroCard.Type = "message";
             heroCard.Attachments = new List<Attachment>();
-
-            await context.PostAsync("Sending attachments.");
             switch (mode)
             {
                 case "colorchange":
