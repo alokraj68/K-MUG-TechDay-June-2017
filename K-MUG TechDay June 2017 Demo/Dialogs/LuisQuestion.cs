@@ -29,7 +29,7 @@ namespace K_MUG_TechDay_June_2017_Demo.Dialogs
             {
                 state.questionFromUser = state.questionFromUser.Trim();
                 context.UserData.SetValue("Question", state.questionFromUser);
-                await context.PostAsync("Looking to my warehouse...");
+                await context.PostAsync("Thinking.!");
             };
 
             return new FormBuilder<Question>()
@@ -68,6 +68,9 @@ namespace K_MUG_TechDay_June_2017_Demo.Dialogs
                                     switch (lj.topScoringIntent.intent.ToString())
                                     {
                                         case "getPrice":
+                                            await context.PostAsync("Looking to my warehouse...");
+                                            await context.PostAsync(typingpush);
+                                            await Global.TypingDelay(3500);
                                             if (lj.entities.Length > 0 && !string.IsNullOrEmpty(lj.entities[0].entity) &&
                                                 !string.IsNullOrEmpty(lj.entities[0].type))
                                             {
@@ -90,7 +93,7 @@ namespace K_MUG_TechDay_June_2017_Demo.Dialogs
                                                             switch (i)
                                                             {
                                                                 case 0:
-                                                                    @from = entity;
+                                                                    from = entity;
                                                                     //     await context.PostAsync("from: " + @from);
                                                                     break;
                                                                 case 1:
@@ -102,40 +105,20 @@ namespace K_MUG_TechDay_June_2017_Demo.Dialogs
                                                             break;
                                                     }
                                                 }
-                                                await context.PostAsync("Here are the 2 " + product + ", from: " + @from + " ~ to: " + to);
-                                                await context.PostAsync(typingpush);
-                                                await Global.TypingDelay(3500);
-                                                //slide horizontally
-                                                //    await context.PostAsync("Should go to conversation, with a hero card");
-                                                var heroCard2 = context.MakeMessage();
-                                                heroCard2.Recipient = context.Activity.From;
-                                                heroCard2.Type = "message";
-                                                heroCard2.Attachments = new List<Attachment>();
-                                                List<CardImage> cardImages2 = new List<CardImage>();
-                                                cardImages2.Add(new CardImage(url: "http://images.pier1.com/dis/dw/image/v2/AAID_PRD/on/demandware.static/-/Sites-pier1_master/default/dwf6aeaaf4/images/2248859/2248859_1.jpg?sw=1600&sh=1600"));
-                                                cardImages2.Add(new CardImage(url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSN_Tq5ow8TlxUA8HnHAF0o107XkDIy46T9uKjYcBSvwRPXz-1"));
-                                                //List<CardAction> cardButtons = new List<CardAction>();
-                                                //CardAction plButton = new CardAction()
-                                                //{
-                                                //    Value = "https://en.wikipedia.org/wiki/Pig_Latin",
-                                                //    Type = "openUrl",
-                                                //    Title = "WikiPedia Page"
-                                                //};
-                                                //cardButtons.Add(plButton);
-                                                HeroCard plCard2 = new HeroCard()
+                                                string response = string.Empty;
+                                                if (from.Length > 0 && to.Length > 0)
                                                 {
-                                                    Title = "Here are the available ones",
-                                                    Subtitle = "You get gray and black",
-                                                    Images = cardImages2
-                                                    //Buttons = cardButtons
-                                                };
-                                                Attachment plAttachment2 = plCard2.ToAttachment();
-                                                heroCard2.Attachments.Add(plAttachment2);
-                                                heroCard2.AttachmentLayout = "carousel";
-                                                await context.PostAsync(heroCard2);
+                                                    response = "Here are the 2 " + product + ", from: " + from + " ~ to: " + to;
+                                                }
+                                                else
+                                                {
+                                                    response = "Here are the 2 " + product;
+                                                }
+                                                await context.PostAsync(response);
                                                 await context.PostAsync(typingpush);
                                                 await Global.TypingDelay(3500);
-                                                await StartAsync(context);
+
+                                                await SendAttachment(context, "getPrice");
                                             }
                                             else
                                             {
@@ -143,39 +126,18 @@ namespace K_MUG_TechDay_June_2017_Demo.Dialogs
                                             }
                                             break;
                                         case "colorChange":
+                                            await context.PostAsync("Looking to my warehouse...");
+                                            await context.PostAsync(typingpush);
+                                            await Global.TypingDelay(3500);
                                             await context.PostAsync("Yes, of course");
                                             await context.PostAsync(typingpush);
                                             await Global.TypingDelay(3500);
-                                            //slide horizontally
-                                            //    await context.PostAsync("Should go to conversation, with a hero card");
-                                            var heroCard = context.MakeMessage();
-                                            heroCard.Recipient = context.Activity.From;
-                                            heroCard.Type = "message";
-                                            heroCard.Attachments = new List<Attachment>();
-                                            List<CardImage> cardImages = new List<CardImage>();
-                                            cardImages.Add(new CardImage(url: "http://images.pier1.com/dis/dw/image/v2/AAID_PRD/on/demandware.static/-/Sites-pier1_master/default/dwf6aeaaf4/images/2248859/2248859_1.jpg?sw=1600&sh=1600"));
-                                            cardImages.Add(new CardImage(url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSN_Tq5ow8TlxUA8HnHAF0o107XkDIy46T9uKjYcBSvwRPXz-1"));
-                                            //List<CardAction> cardButtons = new List<CardAction>();
-                                            //CardAction plButton = new CardAction()
-                                            //{
-                                            //    Value = "https://en.wikipedia.org/wiki/Pig_Latin",
-                                            //    Type = "openUrl",
-                                            //    Title = "WikiPedia Page"
-                                            //};
-                                            //cardButtons.Add(plButton);
-                                            HeroCard plCard = new HeroCard()
-                                            {
-                                                Title = "Here are the color changes available",
-                                                Subtitle = "You get black and blue",
-                                                Images = cardImages
-                                                //Buttons = cardButtons
-                                            };
-                                            Attachment plAttachment = plCard.ToAttachment();
-                                            heroCard.Attachments.Add(plAttachment);
-                                            heroCard.AttachmentLayout = "carousel";
-                                            await context.PostAsync(heroCard);
+                                            await SendAttachment(context, "colorchange");
+                                            break;
+                                        case "thankYou":
                                             await context.PostAsync(typingpush);
                                             await Global.TypingDelay(3500);
+                                            await context.PostAsync("Thanks to you too. Have a great day");
                                             await StartAsync(context);
                                             break;
                                     }
@@ -210,6 +172,80 @@ namespace K_MUG_TechDay_June_2017_Demo.Dialogs
             }
 
 
+        }
+
+        private async Task SendAttachment(IDialogContext context, string mode)
+        {
+            var typingpush = context.MakeMessage();
+            typingpush.Type = ActivityTypes.Typing;
+            var heroCard = context.MakeMessage();
+            heroCard.Recipient = context.Activity.From;
+            heroCard.Type = "message";
+            heroCard.Attachments = new List<Attachment>();
+
+            await context.PostAsync("Sending attachments.");
+            switch (mode)
+            {
+                case "colorchange":
+                    List<CardImage> cardImageBlack = new List<CardImage>();
+                    List<CardImage> cardImageBlue = new List<CardImage>();
+                    cardImageBlack.Add(new CardImage(url: "http://images.pier1.com/dis/dw/image/v2/AAID_PRD/on/demandware.static/-/Sites-pier1_master/default/dwf6aeaaf4/images/2248859/2248859_1.jpg?sw=1600&sh=1600"));
+                    cardImageBlue.Add(new CardImage(url: "http://images.pier1.com/dis/dw/image/v2/AAID_PRD/on/demandware.static/-/Sites-pier1_master/default/dwf6aeaaf4/images/2248859/2248859_1.jpg?sw=1600&sh=1600"));
+                    HeroCard plCardBlack = new HeroCard()
+                    {
+                        Title = "Here are the color changes available",
+                        Subtitle = "You get black and blue",
+                        Text = "This is the black one",
+                        Images = cardImageBlack
+                    };
+                    HeroCard plCardBlue = new HeroCard()
+                    {
+                        Title = "Here are the color changes available",
+                        Subtitle = "You get black and blue",
+                        Text = "This is the blue one",
+                        Images = cardImageBlue
+                    };
+                    Attachment plAttachmentBlack = plCardBlack.ToAttachment();
+                    Attachment plAttachmentBlue = plCardBlue.ToAttachment();
+                    heroCard.Attachments.Add(plAttachmentBlack);
+                    heroCard.Attachments.Add(plAttachmentBlue);
+                    heroCard.AttachmentLayout = "carousel";
+                    await context.PostAsync(heroCard);
+                    await context.PostAsync(typingpush);
+                    await Global.TypingDelay(3500);
+                    await StartAsync(context);
+                    break;
+
+                case "getPrice":
+
+                    List<CardImage> cardImages1 = new List<CardImage>();
+                    List<CardImage> cardImages2 = new List<CardImage>();
+                    cardImages1.Add(new CardImage(url: "http://images.pier1.com/dis/dw/image/v2/AAID_PRD/on/demandware.static/-/Sites-pier1_master/default/dwf6aeaaf4/images/2248859/2248859_1.jpg?sw=1600&sh=1600"));
+                    cardImages2.Add(new CardImage(url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSN_Tq5ow8TlxUA8HnHAF0o107XkDIy46T9uKjYcBSvwRPXz-1"));
+
+                    HeroCard plCard1 = new HeroCard()
+                    {
+                        Title = "Here are the available ones",
+                        Subtitle = "You get gray and black",
+                        Images = cardImages1
+                    };
+                    HeroCard plCard2 = new HeroCard()
+                    {
+                        Title = "Here are the available ones",
+                        Subtitle = "You get gray and black",
+                        Images = cardImages2
+                    };
+                    Attachment plAttachment1 = plCard1.ToAttachment(); Attachment plAttachment2 = plCard1.ToAttachment();
+                    heroCard.Attachments.Add(plAttachment1);
+                    heroCard.Attachments.Add(plAttachment2);
+                    heroCard.AttachmentLayout = "carousel";
+                    await context.PostAsync(heroCard);
+                    await context.PostAsync(typingpush);
+                    await Global.TypingDelay(3500);
+                    await StartAsync(context);
+                    break;
+
+            }
         }
     }
 }

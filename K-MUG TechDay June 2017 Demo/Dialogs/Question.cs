@@ -9,7 +9,7 @@ namespace K_MUG_TechDay_June_2017_Demo.Dialogs
     [Serializable]
     public class Question
     {
-        [Prompt("Now what can i do for you?")]
+        [Prompt("Let me know how can I help?")]
         public string questionFromUser { get; set; }
 
     }
