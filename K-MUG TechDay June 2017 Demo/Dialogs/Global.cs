@@ -12,5 +12,7 @@ namespace K_MUG_TechDay_June_2017_Demo.Dialogs
         {
             await Task.Delay(seconds);
         }
+
+        public static bool DeleteData = true;
     }
 }

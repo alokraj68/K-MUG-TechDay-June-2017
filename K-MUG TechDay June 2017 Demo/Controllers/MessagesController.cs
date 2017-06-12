@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using K_MUG_TechDay_June_2017_Demo.Dialogs;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 
@@ -20,11 +21,13 @@ namespace K_MUG_TechDay_June_2017_Demo
             if (activity.Type == ActivityTypes.Message)
             {
                 ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
-                if ((activity.Text ?? string.Empty) == "//restart" || (activity.Text ?? string.Empty) == "debug")
+                if ((activity.Text ?? string.Empty) == "//restart" || Global.DeleteData || (activity.Text ?? string.Empty) == "debug")
                 {
                     activity.GetStateClient().BotState.DeleteStateForUser(activity.ChannelId, activity.From.Id);
                     await activity.GetStateClient()
                         .BotState.DeleteStateForUserAsync(activity.ChannelId, activity.From.Id);
+                    Global.DeleteData = false;
+                    //Controllers.Global.NextTask = "Welcome";
                 }
                 try
                 {

@@ -108,7 +108,7 @@ namespace K_MUG_TechDay_June_2017_Demo.Dialogs
                                                 string response = string.Empty;
                                                 if (from.Length > 0 && to.Length > 0)
                                                 {
-                                                    response = "Here are the 2 " + product + ", from: " + from + " ~ to: " + to;
+                                                    response = "Here are the 2 " + product + ", from " + from + " to " + to;
                                                 }
                                                 else
                                                 {
@@ -138,10 +138,9 @@ namespace K_MUG_TechDay_June_2017_Demo.Dialogs
                                             await context.PostAsync(typingpush);
                                             await Global.TypingDelay(3500);
                                             await context.PostAsync("Thanks to you too. Have a great day");
-                                            await StartAsync(context);
+                                            Global.DeleteData = true;
                                             break;
                                     }
-
                                 }
                                 else
                                 {
