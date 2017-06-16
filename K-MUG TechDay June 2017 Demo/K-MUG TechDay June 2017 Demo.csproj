@@ -126,6 +126,7 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\K-MUGTechDayJune2017Demo - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\K-MUGTechDayJune2017Demo2 - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
